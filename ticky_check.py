@@ -33,18 +33,17 @@ with open(target_file) as f:
 error_msg = sorted(error_msg.items(), key=operator.itemgetter(1), reverse=True)
 user_stat = sorted(user_stat.items())
 
+# generate two report file error_message.csv and user_statistics.csv.
 with open("error_message.csv", 'w') as f:
     writer = csv.writer(f)
     writer.writerow(["ERROR", "COUNT"])
-
     for row in error_msg:
         writer.writerow(row)
 
-'''
 with open("user_statistics.csv", 'w') as f:
     writer = csv.writer(f)
     writer.writerow(["USERNAME", "INFO", "ERROR"])
-
     for row in user_stat:
-        print(row)
-'''
+        user, log_type = row
+        line = [user, log_type["INFO"], log_type["ERROR"]]
+        writer.writerow(line)
