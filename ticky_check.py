@@ -3,6 +3,7 @@
 import re
 import operator
 import os
+import csv
 
 path = os.getcwd()
 target_file=os.path.join(path, "syslog.log")
@@ -29,5 +30,21 @@ with open(target_file) as f:
         if "INFO" in line:
             user_stat[result_usern[1]]["INFO"] += 1
 
-print(sorted(error_msg.items(), key=operator.itemgetter(1), reverse=True))
-print(sorted(user_stat.items()))
+error_msg = sorted(error_msg.items(), key=operator.itemgetter(1), reverse=True)
+user_stat = sorted(user_stat.items())
+
+with open("error_message.csv", 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow(["ERROR", "COUNT"])
+
+    for row in error_msg:
+        writer.writerow(row)
+
+'''
+with open("user_statistics.csv", 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow(["USERNAME", "INFO", "ERROR"])
+
+    for row in user_stat:
+        print(row)
+'''
