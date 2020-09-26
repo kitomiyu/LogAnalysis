@@ -13,16 +13,21 @@ user_stat = {}
 user_name_pattern = r"\(([\w*.]*)\)"
 error_msg_pattern = r"[INFO|ERROR] ([\w ]*)"
 
-
 with open(target_file) as f:
     for line in f:
         result_usern = re.search(user_name_pattern, line)
+
+        if result_usern[1] not in user_stat.keys():
+            user_stat[result_usern[1]] = {}
+            user_stat[result_usern[1]]["INFO"] = 0
+            user_stat[result_usern[1]]["ERROR"] = 0
         if "ERROR" in line:
             # error msg (error, count)
             result_error = re.search(error_msg_pattern, line)
             error_msg[result_error[1]] = error_msg.get(result_error[1], 0) + 1
-        # check user statistics (username, info, error)
-
-
+            user_stat[result_usern[1]]["ERROR"] += 1
+        if "INFO" in line:
+            user_stat[result_usern[1]]["INFO"] += 1
 
 print(sorted(error_msg.items(), key=operator.itemgetter(1), reverse=True))
+print(sorted(user_stat.items()))
